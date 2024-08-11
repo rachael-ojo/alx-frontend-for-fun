@@ -3,7 +3,7 @@
 """
 markdown2html.py
 
-A script to convert Markdown headings, unordered lists, ordered lists, and paragraphs to HTML.
+A script to convert Markdown headings, unordered lists, ordered lists, paragraphs, and bold text to HTML.
 
 Usage:
     ./markdown2html.py <input_markdown_file> <output_html_file>
@@ -17,15 +17,17 @@ This script handles:
     - Unordered lists starting with '- ' converted to <ul> and <li> tags.
     - Ordered lists starting with '* ' converted to <ol> and <li> tags.
     - Paragraphs, with multiple lines separated by newlines and line breaks, wrapped in <p> tags.
+    - Bold text (**text** to <b>text</b> and __text__ to <em>text</em>).
 """
 
 import sys
 import os
+import re
 
 
 def convert_markdown_to_html(markdown_file, output_file):
     """
-    Converts a Markdown file to HTML, handling headings, unordered lists, ordered lists, and paragraphs.
+    Converts a Markdown file to HTML, handling headings, unordered lists, ordered lists, paragraphs, and bold text.
 
     Args:
         markdown_file (str): The path to the input Markdown file.
@@ -54,10 +56,16 @@ def convert_markdown_to_html(markdown_file, output_file):
         """Flush the current paragraph lines to HTML."""
         nonlocal paragraph_lines
         if paragraph_lines:
-            html_lines.append("<p>")
-            html_lines.append("<br />\n".join(paragraph_lines).strip())
-            html_lines.append("</p>")
+            paragraph_html = "<br />\n".join(paragraph_lines).strip()
+            paragraph_html = parse_bold_syntax(paragraph_html)
+            html_lines.append(f"<p>{paragraph_html}</p>")
             paragraph_lines = []
+
+    def parse_bold_syntax(text):
+        """Parse bold syntax (**text** and __text__) into HTML."""
+        text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
+        text = re.sub(r'__(.*?)__', r'<em>\1</em>', text)
+        return text
 
     for line in lines:
         line = line.rstrip('\n')  # Remove trailing newline
@@ -68,8 +76,8 @@ def convert_markdown_to_html(markdown_file, output_file):
             heading_level = line.count('#')
             if 1 <= heading_level <= 6:
                 heading_text = line[heading_level:].strip()  # Remove '#' and trim spaces
-                html_line = f"<h{heading_level}>{heading_text}</h{heading_level}>"
-                html_lines.append(html_line)
+                heading_html = f"<h{heading_level}>{parse_bold_syntax(heading_text)}</h{heading_level}>"
+                html_lines.append(heading_html)
         elif line.startswith('- '):
             # Handle unordered lists
             flush_paragraph()
@@ -79,7 +87,7 @@ def convert_markdown_to_html(markdown_file, output_file):
                 html_lines.append("<ul>")
                 in_list = True
                 list_type = 'ul'
-            list_item = line[2:].strip()  # Remove '- ' and trim spaces
+            list_item = parse_bold_syntax(line[2:].strip())  # Remove '- ' and trim spaces
             html_lines.append(f"<li>{list_item}</li>")
         elif line.startswith('* '):
             # Handle ordered lists
@@ -90,7 +98,7 @@ def convert_markdown_to_html(markdown_file, output_file):
                 html_lines.append("<ol>")
                 in_list = True
                 list_type = 'ol'
-            list_item = line[2:].strip()  # Remove '* ' and trim spaces
+            list_item = parse_bold_syntax(line[2:].strip())  # Remove '* ' and trim spaces
             html_lines.append(f"<li>{list_item}</li>")
         elif line.strip():  # Non-empty line
             # Collect lines for paragraphs
