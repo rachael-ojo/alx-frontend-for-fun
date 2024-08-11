@@ -49,21 +49,21 @@ def convert_markdown_to_html(markdown_file, output_file):
         elif line.startswith('- '):
             # Handle unordered lists
             if not in_list:
-                html_lines.append("<ul>")
+                html_lines.append("<ol>")
                 in_list = True
             list_item = line[2:].strip()  # Remove '- ' and trim spaces
             html_lines.append(f"<li>{list_item}</li>")
         else:
             # End of a list or non-list lines
             if in_list:
-                html_lines.append("</ul>")
+                html_lines.append("</ol>")
                 in_list = False
             if line.strip():  # Only wrap non-empty lines in <p> tags
                 html_lines.append(f"<p>{line}</p>")
 
     # Close any remaining open list tags
     if in_list:
-        html_lines.append("</ul>")
+        html_lines.append("</ol>")
 
     with open(output_file, 'w') as out_file:
         out_file.write("\n".join(html_lines) + "\n")
