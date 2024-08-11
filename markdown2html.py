@@ -3,7 +3,7 @@
 """
 markdown2html.py
 
-A script to convert Markdown headings and unordered lists to HTML.
+A script to convert Markdown headings, unordered lists, and ordered lists to HTML.
 
 Usage:
     ./markdown2html.py <input_markdown_file> <output_html_file>
@@ -15,6 +15,7 @@ Arguments:
 This script handles:
     - Headings (# to ######) converted to <h1> to <h6> tags.
     - Unordered lists starting with '- ' converted to <ul> and <li> tags.
+    - Ordered lists starting with '* ' converted to <ol> and <li> tags.
     - Plain text wrapped in <p> tags.
 """
 
@@ -24,7 +25,7 @@ import os
 
 def convert_markdown_to_html(markdown_file, output_file):
     """
-    Converts a Markdown file to HTML, handling headings and unordered lists.
+    Converts a Markdown file to HTML, handling headings, unordered lists, and ordered lists.
 
     Args:
         markdown_file (str): The path to the input Markdown file.
@@ -35,6 +36,7 @@ def convert_markdown_to_html(markdown_file, output_file):
 
     html_lines = []
     in_list = False
+    list_type = None
 
     for line in lines:
         line = line.rstrip('\n')  # Remove trailing newline
@@ -48,22 +50,42 @@ def convert_markdown_to_html(markdown_file, output_file):
                 html_lines.append(html_line)
         elif line.startswith('- '):
             # Handle unordered lists
-            if not in_list:
+            if not in_list or list_type != 'ul':
+                if in_list:
+                    html_lines.append("</ul>")
+                html_lines.append("<ul>")
+                in_list = True
+                list_type = 'ul'
+            list_item = line[2:].strip()  # Remove '- ' and trim spaces
+            html_lines.append(f"<li>{list_item}</li>")
+        elif line.startswith('* '):
+            # Handle ordered lists
+            if not in_list or list_type != 'ol':
+                if in_list:
+                    html_lines.append("</ol>")
                 html_lines.append("<ol>")
                 in_list = True
-            list_item = line[2:].strip()  # Remove '- ' and trim spaces
+                list_type = 'ol'
+            list_item = line[2:].strip()  # Remove '* ' and trim spaces
             html_lines.append(f"<li>{list_item}</li>")
         else:
             # End of a list or non-list lines
             if in_list:
-                html_lines.append("</ol>")
+                if list_type == 'ul':
+                    html_lines.append("</ul>")
+                elif list_type == 'ol':
+                    html_lines.append("</ol>")
                 in_list = False
+                list_type = None
             if line.strip():  # Only wrap non-empty lines in <p> tags
                 html_lines.append(f"<p>{line}</p>")
 
     # Close any remaining open list tags
     if in_list:
-        html_lines.append("</ol>")
+        if list_type == 'ul':
+            html_lines.append("</ul>")
+        elif list_type == 'ol':
+            html_lines.append("</ol>")
 
     with open(output_file, 'w') as out_file:
         out_file.write("\n".join(html_lines) + "\n")
