@@ -21,6 +21,7 @@ This script handles:
 import sys
 import os
 
+
 def convert_markdown_to_html(markdown_file, output_file):
     """
     Converts a Markdown file to HTML, handling headings and unordered lists.
@@ -31,22 +32,20 @@ def convert_markdown_to_html(markdown_file, output_file):
     """
     with open(markdown_file, 'r') as md_file:
         lines = md_file.readlines()
-    
+
     html_lines = []
     in_list = False
 
     for line in lines:
         line = line.rstrip('\n')  # Remove trailing newline
-        
+
         if line.startswith('#'):
             # Handle headings
             heading_level = line.count('#')
             if 1 <= heading_level <= 6:
-                heading_text = line[heading_level:].strip()
+                heading_text = line[heading_level:].strip()  # Remove '#' and trim spaces
                 html_line = f"<h{heading_level}>{heading_text}</h{heading_level}>"
                 html_lines.append(html_line)
-            else:
-                html_lines.append(line)
         elif line.startswith('- '):
             # Handle unordered lists
             if not in_list:
@@ -59,7 +58,8 @@ def convert_markdown_to_html(markdown_file, output_file):
             if in_list:
                 html_lines.append("</ul>")
                 in_list = False
-            html_lines.append(f"<p>{line}</p>")
+            if line.strip():  # Only wrap non-empty lines in <p> tags
+                html_lines.append(f"<p>{line}</p>")
 
     # Close any remaining open list tags
     if in_list:
@@ -67,6 +67,7 @@ def convert_markdown_to_html(markdown_file, output_file):
 
     with open(output_file, 'w') as out_file:
         out_file.write("\n".join(html_lines) + "\n")
+
 
 def main():
     """
@@ -87,6 +88,7 @@ def main():
 
     # If everything is successful, exit with code 0
     sys.exit(0)
+
 
 if __name__ == "__main__":
     main()
