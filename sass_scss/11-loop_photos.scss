@@ -5,18 +5,12 @@ body {
         color: #3D3D3D;
     }
 }
-.julien {
-  background-image: url('julien.jpg');
-}
+// Import the list of names
+@import 'names';
 
-.john {
-  background-image: url('john.jpg');
-}
-
-.sam {
-  background-image: url('sam.jpg');
-}
-
-.damian {
-  background-image: url('damian.jpg');
+// Create classes dynamically using @each statement
+@each $name in $list-names {
+  .#{$name} {
+    background-image: url('#{$name}.jpg');
+  }
 }
