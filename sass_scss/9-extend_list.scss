@@ -1,0 +1,23 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+// Define the base style for .info class
+.info {
+  font-size: 12px;
+}
+
+// Define the style for .success class and extend .info
+.success {
+  @extend .info;
+  color: #00FF00;
+}
+
+// Define the style for .warning class and extend .info
+.warning {
+  @extend .info;
+  color: #FF0000;
+}

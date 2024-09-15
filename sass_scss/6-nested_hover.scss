@@ -1,0 +1,16 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+button {
+  // Set default text color for button tags
+  color: #FF0000;
+
+  // Change text color on hover
+  &:hover {
+    color: #00FF00;
+  }
+}

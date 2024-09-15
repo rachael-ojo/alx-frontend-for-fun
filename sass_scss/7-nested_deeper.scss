@@ -1,0 +1,21 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+body {
+  // Set default font size for body tags
+  font-size: 14px;
+
+  // Set font size for h1 tags inside body
+  h1 {
+    font-size: 16px;
+
+    // Override font size for h1 tags with class .smaller
+    &.smaller {
+      font-size: 12px;
+    }
+  }
+}

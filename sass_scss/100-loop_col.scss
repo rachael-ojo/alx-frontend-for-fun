@@ -1,0 +1,13 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+// Create classes with dynamic widths using @for statement
+@for $i from 1 through 4 {
+  .col-#{$i} {
+    width: (100% / $i);
+  }
+}

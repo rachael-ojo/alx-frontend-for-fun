@@ -1,0 +1,24 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+// Define variables for the text and background colors
+$text-color: #3D3D3D;
+$background-color: #6D6D6D;
+
+// Use the variables to style the body, p, and h2 tags
+body {
+  color: $text-color;
+  background-color: $background-color;
+}
+
+p {
+  color: $text-color;
+}
+
+h2 {
+  background-color: $background-color;
+}

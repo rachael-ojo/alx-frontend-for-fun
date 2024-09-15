@@ -1,0 +1,13 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+@mixin debug_log($message) {
+  @debug $message;
+}
+
+// Example usage:
+@include debug_log("Hello World");

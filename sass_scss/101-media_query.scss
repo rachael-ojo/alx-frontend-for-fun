@@ -1,0 +1,18 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+// Set default font size for h1 tags
+h1 {
+  font-size: 20px;
+}
+
+// Set font size for h1 tags on smaller screens
+@media (max-width: 320px) {
+  h1 {
+    font-size: 14px;
+  }
+}

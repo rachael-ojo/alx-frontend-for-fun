@@ -1,0 +1,24 @@
+cat my_styles.scss
+/* My style */
+body {
+    .container {
+        color: #3D3D3D;
+    }
+}
+// Import the 10-colors.scss file
+@import '10-colors';
+
+// Assign text color to .red class
+.red {
+  color: $red;
+}
+
+// Assign text color to .green class
+.green {
+  color: $green;
+}
+
+// Assign text color to .blue class
+.blue {
+  color: $blue;
+}
