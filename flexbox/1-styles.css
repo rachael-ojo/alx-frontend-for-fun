@@ -1,0 +1,11 @@
+/* Grid section */
+.row {
+    display: flex; /* added this property to make all children flex items */
+}
+
+[class*='col-'] {
+    /* removed float: left */
+    width: 33.33%;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
