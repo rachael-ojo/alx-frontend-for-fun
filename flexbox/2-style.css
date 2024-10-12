@@ -1,5 +1,5 @@
-/* Section Latest news ============================= */
+/* Section SERVICES ============================= */
 
-.section-latest-news .row {
-  flex-direction: row-reverse;
+.section-services .row {
+  flex-wrap: wrap;
 }
